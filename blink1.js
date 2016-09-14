@@ -47,6 +47,7 @@ function Blink1(serialNumber) {
 
   this.serialNumber = serialNumber;
   this.hidDevice = new HID.HID(blink1HIDdevicePath);
+  this.doDegamma = true;
 }
 
 Blink1.prototype._sendCommand = function(/* command [, args ...]*/) {
@@ -153,6 +154,7 @@ Blink1.prototype.eeWrite = function(address, value, callback) {
 };
 
 Blink1.prototype.degamma = function(n) {
+  if( !this.doDegamma ) { return n; }
   return Math.floor(((1 << Math.floor(n / 32)) - 1) +
           Math.floor((1 << Math.floor(n / 32)) * Math.floor((n % 32) + 1) + 15) / 32);
 };
@@ -318,4 +320,3 @@ Blink1.devices = devices;
 
 module.exports = Blink1;
 module.exports.Blink1 = Blink1; // backwards compatibility with older version
-
