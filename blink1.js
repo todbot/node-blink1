@@ -1,5 +1,7 @@
 var HID = require('node-hid');
 
+var PatternPlayer = require('./patternPlayer');
+
 var VENDOR_ID = 0x27B8;
 var PRODUCT_ID = 0x01ED;
 
@@ -316,7 +318,21 @@ Blink1.prototype.close = function(callback) {
   }
 };
 
+Blink1.prototype.playPattern = function(pattern, callback) {
+    if( !this.patternPlayer ) {
+        this.patternPlayer = new PatternPlayer( this );
+    }
+    this.patternPlayer.play( pattern, callback );
+};
+
+Blink1.prototype.stopPattern = function() {
+    if( this.patternPlayer ) {
+        this.patternPlayer.stopPattern();
+    }
+};
+
 Blink1.devices = devices;
 
 module.exports = Blink1;
 module.exports.Blink1 = Blink1; // backwards compatibility with older version
+module.exports.PatternPlayer = PatternPlayer; // if you want the player by itself
